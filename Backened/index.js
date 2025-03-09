@@ -2,6 +2,7 @@ const express = require("express")
 const cors = require("cors")
 require("./db/mongoose")
 const user = require("./user")
+const product = require("./product")
 const app = express()
 app.use(express.json())
 app.use(cors())
@@ -25,5 +26,12 @@ app.post("/login", async (req,res)=>{
   else{
     res.send({message:"Invalid Credentials"})
 }
+})
+
+//product ki api
+app.post("/add-product", async(req,res)=>{
+  let Product = new product(req.body)
+  let result = await Product.save()
+  res.send(result)
 })
 app.listen(4000)
