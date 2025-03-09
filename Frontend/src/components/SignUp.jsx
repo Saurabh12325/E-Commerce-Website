@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-const SignUp = () => {
 
+const SignUp = () => {
   const [name, setName] = useState("");
   const [password, setPass] = useState("");
   const [email, setEmail] = useState("");
   const navigate  = useNavigate();
+
+  useEffect(() => {
+    const auth = localStorage.getItem('user-info')
+    if (auth) {
+      navigate('/')
+    }
+  })
+ 
   
   const collectData = async () => {
     console.warn(name, email, password);
@@ -18,13 +26,17 @@ const SignUp = () => {
     })
     result = await result.json()
     console.warn(result)
+    localStorage.setItem('user-info',JSON.stringify(result))                                                                                                                                                                   
     if(result){
-        navigate('/')
-    }
-  };
- 
+        navigate('/')  
 
-  return (
+        
+    }
+
+  };
+
+
+  return (                                                                                    
     <div className="flex flex-col justify-center items-center ">
       <h1 className="text-center mt-4 p-5 font-semibold text-4xl">
         Register Yourself
