@@ -25,6 +25,7 @@ app.post("/login", async (req,res)=>{
   }
   else{
     res.send({message:"Invalid Credentials"})
+   
 }
 })
 
@@ -34,4 +35,16 @@ app.post("/add-product", async(req,res)=>{
   let result = await Product.save()
   res.send(result)
 })
+
+//get all the products
+app.get("/products",async(req,res)=>{
+  let products =  await product.find()
+  if(products.length>0){
+    res.send(products)
+  }
+  else{
+    res.send({message:"No products found"})
+  }
+})
+
 app.listen(4000)

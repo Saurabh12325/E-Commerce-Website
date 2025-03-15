@@ -1,10 +1,11 @@
 import React from "react";
- 
-const Footer =()=>{
-return(
-    <div className="absolute bottom-0 bg-pink-400 w-full text-white font-bold p-4 text-center ">
-        <h1>E-comm</h1>
-    </div>
-)
-}
-export default Footer
+
+const Footer = () => {
+  return (
+    <footer className="fixed bottom-0 w-full bg-pink-500 text-white font-bold py-4 text-center shadow-md">
+      <h1 className="text-lg">E-comm © {new Date().getFullYear()}</h1>
+    </footer>
+  );
+};
+
+export default Footer;
