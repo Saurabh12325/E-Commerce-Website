@@ -7,6 +7,8 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
+
+//register ki api
 app.post("/register",async (req,res)=>{
     let data = new user(req.body)
     let result =  await data.save()
@@ -46,5 +48,46 @@ app.get("/products",async(req,res)=>{
     res.send({message:"No products found"})
   }
 })
+//delete product api
+app.delete("/product/:id",async(req,res)=>{
+
+  let result = await product.deleteOne({_id:req.params.id})
+  if(result.deletedCount>0){
+    res.send({message:"Product Deleted"})
+  }
+  else{
+    res.send({message:"Product not found"})
+  }
+})
+
+//single product ki api using id 
+app.get("/product/:id",async(req,res)=>{
+  let result = await product.findOne({_id:req.params.id})
+  if(result){
+    res.send(result)
+  }
+  else{
+    res.send({message:"Product not found"})
+  }
+})
+//update product ki api
+app.put('/product/:id',async(req,res)=>{
+  let result = await product.updateOne({_id:req.params.id},{$set:req.body})
+res.send(result)
+})
+//search ki api
+app.get('/search/:key',async(req,res)=>{
+  let result = await product.find(
+    {"$or":[
+      {name:{$regex: req.params.key}},
+      {company:{$regex: req.params.key}},
+      {category:{$regex: req.params.key}}
+    ]}
+   )
+   res.send(result)
+  })
+  
+
+
 
 app.listen(4000)

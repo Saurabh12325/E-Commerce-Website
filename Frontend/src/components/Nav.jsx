@@ -16,7 +16,7 @@ const Nav = () => {
                 <ul className='flex gap-8  p-4 w-full bg-pink-400 text-white font-semibold justify-center'>
                     <li><Link to='/'>Product</Link></li>
                     <li><Link to='/add'>Add Product</Link></li>
-                    <li><Link to='/update'>Update Product</Link></li>
+                    {/* <li><Link to='/update/'>Update Product</Link></li> */}
                     <li><Link to='/profile'>Profile</Link></li>
                     <li><Link onClick={logout} to='/signup'>Logout ({JSON.parse(auth).name})</Link></li>
                 </ul>

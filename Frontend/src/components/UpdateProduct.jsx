@@ -1,16 +1,30 @@
-import React, { useState  } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react'
 
-function AddProduct() {
+import  { useState } from 'react';
+import { useParams ,useNavigate} from 'react-router-dom';
+
+function UpdateProduct() {
     const [name, setName] = useState("");
     const [company, setCompany] = useState("");
     const [price, setPrice] = useState("");
     const [category, setCategory] = useState("");
     const [error, setError] = useState(false);
-    const navigate = useNavigate();  
+    const params = useParams();
+    const navigate = useNavigate();
   
-
-    const addProduct = async () => {
+    useEffect(() => {
+       
+        getProductDetails();
+    }, [])
+    const getProductDetails = async () => {
+        let result = await fetch(`http://localhost:4000/product/${params.id}`)
+        result = await result.json()
+        setName(result.name)
+        setCompany(result.company)
+        setPrice(result.price)
+        setCategory(result.category)
+    }
+    const updateProduct = async () => {
 
         if (!name || !company || !price || isNaN(price) || !category) {
             setError(true);
@@ -18,26 +32,22 @@ function AddProduct() {
         }
 
         setError(false);
-        const userId = JSON.parse(localStorage.getItem("user-info"))?._id;
-        let item = { name, company, price, category, userId };
-
-        let response = await fetch("http://localhost:4000/add-product", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-            },
-            body: JSON.stringify(item),
-        });
-        let result = await response.json();
-        console.log(result);
-        navigate("/");
-        
+     let responses = await fetch(`http://localhost:4000/product/${params.id}`, {
+      method: "PUT",
+      body: JSON.stringify({ name, company, price, category }),
+      headers: {
+        "content-type": "application/json"
+      }
+    
+     })
+     responses = await responses.json()
+     navigate('/')
+      
     };
 
     return (
         <div className="flex flex-col justify-center items-center">
-            <h1 className="text-center mt-5 p-5 font-semibold text-4xl">Add Product</h1>
+            <h1 className="text-center mt-5 p-5 font-semibold text-4xl">Update Product</h1>
             <div className="mt-5 p-6 bg-slate-200 w-[400px] border border-black rounded-md shadow-lg">
                 <div className="mb-3">
                     <label className="block mt-2">Name</label>
@@ -85,7 +95,7 @@ function AddProduct() {
                 </div>
                 <button
                     className="bg-blue-600 text-white p-2 mt-4 w-full rounded-md font-semibold hover:bg-blue-500"
-                    onClick={addProduct}
+                    onClick={updateProduct}
                 >
                     Submit
                 </button>
@@ -94,4 +104,6 @@ function AddProduct() {
     );
 }
 
-export default AddProduct;
+
+
+export default UpdateProduct
